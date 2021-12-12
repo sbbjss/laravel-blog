@@ -8,11 +8,11 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 class Post
 {
-    public  $title;
-    public  $excerpt;
-    public  $date;
-    public  $body;
-    public  $slug;
+    public $title;
+    public $excerpt;
+    public $date;
+    public $body;
+    public $slug;
 
     public function __construct($title, $excerpt, $date, $body, $slug)
     {
@@ -20,21 +20,23 @@ class Post
         $this->excerpt = $excerpt;
         $this->date    = $date;
         $this->body    = $body;
-        $this->slug    = preg_replace('(\s)','-',mb_strtolower($title));
+        $this->slug    = preg_replace('(\s)', '-', mb_strtolower($title));
     }
 
     public static function all()
     {
-        return collect(File::files(resource_path("posts")))
-            ->map(fn($file) => YamlFrontMatter::parseFile($file))
-            ->map(fn($document) => new Post(
-                $document->title,
-                $document->excerpt,
-                $document->date,
-                $document->body(),
-                $document->slug,
-            ))
-            ->sortByDesc('date');
+        return cache()->rememberForever('posts.all', function () {
+            return collect(File::files(resource_path("posts")))
+                ->map(fn($file) => YamlFrontMatter::parseFile($file))
+                ->map(fn($document) => new Post(
+                    $document->title,
+                    $document->excerpt,
+                    $document->date,
+                    $document->body(),
+                    $document->slug,
+                ))
+                ->sortByDesc('date');
+        });
     }
 
     public static function find($slug)
