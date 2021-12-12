@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
 
 class Post
 {
-    public $title;
-    public $excerpt;
-    public $date;
-    public $body;
-    public $slug;
+    public string $title;
+    public string $excerpt;
+    public int $date;
+    public string $body;
+    public string $slug;
 
     public function __construct($title, $excerpt, $date, $body, $slug)
     {
@@ -20,7 +20,7 @@ class Post
         $this->excerpt = $excerpt;
         $this->date    = $date;
         $this->body    = $body;
-        $this->slug    = preg_replace('(\s)', '-', mb_strtolower($title));
+        $this->slug    = Str::slug($title);
     }
 
     public static function all()
