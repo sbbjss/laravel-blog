@@ -14,7 +14,7 @@ class Post
     public string $body;
     public string $slug;
 
-    public function __construct($title, $excerpt, $date, $body, $slug)
+    public function __construct(string $title, string $excerpt, int $date, string $body, string $slug)
     {
         $this->title   = $title;
         $this->excerpt = $excerpt;
@@ -39,7 +39,7 @@ class Post
         });
     }
 
-    public static function find($slug)
+    public static function find(string $slug)
     {
         return static::all()->firstWhere('slug', $slug);
     }

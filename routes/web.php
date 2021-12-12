@@ -17,6 +17,7 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 */
 
 Route::get('/', function () {
+    ddd(Post::all());
     return view('posts', ['posts' => Post::all()]);
 });
 
